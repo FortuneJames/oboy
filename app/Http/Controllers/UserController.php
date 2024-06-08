@@ -10,6 +10,7 @@ use App\Models\Payment;
 use Illuminate\Http\Request;
 use Toastr;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 
 class UserController extends Controller
@@ -148,48 +149,184 @@ class UserController extends Controller
     }
 
 
+    // public function invest(Investment $investment)
+    // {
+    //     $user = Auth::user();
+
+    //     if ($user && $user->role === 'user') {
+    //         if ($user->balance >= $investment->min) {
+    //             try {
+    //                 DB::beginTransaction();
+
+    //                 // Deduct the investment amount from the user's balance
+    //                 $investmentAmount = min($user->balance, $investment->min);
+    //                 $user->balance -= $investmentAmount;
+    //                 $user->save();
+
+    //                 // Calculate the return amount
+    //                 $returnAmount = $investmentAmount * (1 + $investment->percentage / 100);
+
+    //                 // Create an investment history record
+    //                 DB::table('investment_histories')->insert([
+    //                     'user_id' => $user->id,
+    //                     'investment_id' => $investment->id,
+    //                     'amount' => $investmentAmount,
+    //                     'return_amount' => $returnAmount,
+    //                     'invested_at' => now(),
+    //                     'created_at' => now(),
+    //                     'updated_at' => now(),
+    //                 ]);
+
+    //                 DB::commit();
+
+    //                 return redirect()->back()->with('success', 'Investment successful.');
+    //             } catch (\Exception $e) {
+    //                 DB::rollBack();
+
+    //                 return redirect()->back()->with('error', 'An error occurred during the investment.');
+    //             }
+    //         } else {
+    //             return redirect()->back()->with('error', 'Insufficient balance for investment.');
+    //         }
+    //     }
+
+    //     return redirect()->back()->with('error', 'Unauthorized action.');
+    // }
+    // public function invest(Investment $investment)
+    // {
+    //     $user = Auth::user();
+
+    //     if ($user && $user->role === 'user') {
+    //         // Validate that the 'min' field is numeric
+    //         if (!is_numeric($investment->min)) {
+    //             return redirect()->back()->with('error', 'Invalid investment minimum amount.');
+    //         }
+
+    //         if ($user->balance >= $investment->min) {
+    //             try {
+    //                 DB::beginTransaction();
+
+    //                 // Deduct the investment amount from the user's balance
+    //                 $investmentAmount = min($user->balance, $investment->min);
+    //                 $user->balance -= $investmentAmount;
+    //                 $user->save();
+
+    //                 // Validate that the 'percentage' field exists and is numeric
+    //                 if (!isset($investment->percentage) || !is_numeric($investment->percentage)) {
+    //                     return redirect()->back()->with('error', 'Invalid investment percentage.');
+    //                 }
+
+    //                 // Calculate the return amount
+    //                 $returnAmount = $investmentAmount * (1 + $investment->percentage / 100);
+
+    //                 // Create an investment history record
+    //                 DB::table('investment_histories')->insert([
+    //                     'user_id' => $user->id,
+    //                     'investment_id' => $investment->id,
+    //                     'amount' => $investmentAmount,
+    //                     'return_amount' => $returnAmount,
+    //                     'invested_at' => now(),
+    //                     'created_at' => now(),
+    //                     'updated_at' => now(),
+    //                 ]);
+
+    //                 DB::commit();
+
+    //                 return redirect()->back()->with('success', 'Investment successful.');
+    //             } catch (\Exception $e) {
+    //                 DB::rollBack();
+
+    //                 // Log the exception message and stack trace
+    //                 Log::error('Investment Error: ' . $e->getMessage(), ['exception' => $e]);
+
+    //                 return redirect()->back()->with('error', 'An error occurred during the investment.');
+    //             }
+    //         } else {
+    //             return redirect()->back()->with('error', 'Insufficient balance for investment.');
+    //         }
+    //     }
+
+    //     return redirect()->back()->with('error', 'Unauthorized action.');
+    // }
     public function invest(Investment $investment)
     {
         $user = Auth::user();
 
-        if ($user && $user->role === 'user') {
-            if ($user->balance >= $investment->min) {
-                try {
-                    DB::beginTransaction();
-
-                    // Deduct the investment amount from the user's balance
-                    $investmentAmount = min($user->balance, $investment->min);
-                    $user->balance -= $investmentAmount;
-                    $user->save();
-
-                    // Calculate the return amount
-                    $returnAmount = $investmentAmount * (1 + $investment->percentage / 100);
-
-                    // Create an investment history record
-                    DB::table('investment_histories')->insert([
-                        'user_id' => $user->id,
-                        'investment_id' => $investment->id,
-                        'amount' => $investmentAmount,
-                        'return_amount' => $returnAmount,
-                        'invested_at' => now(),
-                        'created_at' => now(),
-                        'updated_at' => now(),
-                    ]);
-
-                    DB::commit();
-
-                    return redirect()->back()->with('success', 'Investment successful.');
-                } catch (\Exception $e) {
-                    DB::rollBack();
-
-                    return redirect()->back()->with('error', 'An error occurred during the investment.');
-                }
-            } else {
-                return redirect()->back()->with('error', 'Insufficient balance for investment.');
-            }
+        if (!$this->isAuthorizedUser($user)) {
+            return redirect()->back()->with('error', 'Unauthorized action.');
         }
 
-        return redirect()->back()->with('error', 'Unauthorized action.');
+        if (!$this->isValidInvestment($investment)) {
+            return redirect()->back()->with('error', 'Invalid investment details.');
+        }
+
+        if (!$this->hasSufficientBalance($user, $investment->min)) {
+            return redirect()->back()->with('error', 'Insufficient balance for investment.');
+        }
+
+        try {
+            DB::beginTransaction();
+
+            // Deduct the investment amount from the user's balance
+            $investmentAmount = $this->deductBalance($user, $investment->min);
+
+            // Calculate the return amount
+            $returnAmount = $this->calculateReturnAmount($investmentAmount, $investment->percentage);
+
+            // Create an investment history record
+            $this->createInvestmentHistory($user->id, $investment->id, $investmentAmount, $returnAmount);
+
+            DB::commit();
+
+            return redirect()->back()->with('success', 'Investment successful.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            // Log the exception message and stack trace
+            Log::error('Investment Error: ' . $e->getMessage(), ['exception' => $e]);
+
+            return redirect()->back()->with('error', 'An error occurred during the investment.');
+        }
+    }
+
+    private function isAuthorizedUser($user)
+    {
+        return $user && $user->role === 'user';
+    }
+
+    private function isValidInvestment($investment)
+    {
+        return is_numeric($investment->min) && isset($investment->percentage) && is_numeric($investment->percentage);
+    }
+
+    private function hasSufficientBalance($user, $minAmount)
+    {
+        return $user->balance >= $minAmount;
+    }
+
+    private function deductBalance($user, $minAmount)
+    {
+        $investmentAmount = min($user->balance, $minAmount);
+        $user->balance -= $investmentAmount;
+        $user->save();
+
+        return $investmentAmount;
+    }
+
+    private function calculateReturnAmount($investmentAmount, $percentage)
+    {
+        return $investmentAmount * (1 + $percentage / 100);
+    }
+
+    private function createInvestmentHistory($userId, $investmentId, $amount, $returnAmount)
+    {
+        History::create([
+            'user_id' => $userId,
+            'investment_id' => $investmentId,
+            'amount' => $amount,
+            'return_amount' => $returnAmount,
+            'invested_at' => now(),
+        ]);
     }
 
 
@@ -197,21 +334,21 @@ class UserController extends Controller
 
 
     public function history()
-{
-    $user = Auth::user();
+    {
+        $user = Auth::user();
 
-    if ($user && $user->role === 'user') {
-        // Fetch user's investment histories and related investment details
-        $histories = $user->histories()
-            ->with('investment') // Assuming 'investment' is the relationship name in your History model
-            ->orderBy('created_at', 'desc')
-            ->get();
+        if ($user && $user->role === 'user') {
+            // Fetch user's investment histories and related investment details
+            $histories = $user->histories()
+                ->with('investment') // Assuming 'investment' is the relationship name in your History model
+                ->orderBy('created_at', 'desc')
+                ->get();
 
-        return view('user.history', compact('histories'));
+            return view('user.history', compact('histories'));
+        }
+
+        return redirect()->back()->with('error', 'Unauthorized action.');
     }
-
-    return redirect()->back()->with('error', 'Unauthorized action.');
-}
 
 
 
@@ -221,7 +358,7 @@ class UserController extends Controller
 
         if ($user && $user->role === 'user') {
             // Find the specific investment history entry for the user
-            $investmentHistory =Historyy::where('id', $historyId)
+            $investmentHistory = History::where('id', $historyId)
                 ->where('user_id', $user->id)
                 ->where('status', 'active')
                 ->first();
@@ -242,14 +379,14 @@ class UserController extends Controller
 
                     DB::commit();
 
-                    return redirect()->route('user.history')->with('success', 'Investment unstaked successfully.');
+                    return redirect()->route('investments.history')->with('success', 'Investment unstaked successfully.');
                 } catch (\Exception $e) {
                     DB::rollBack();
 
-                    return redirect()->route('users.history')->with('error', 'An error occurred during the unstaking.');
+                    return redirect()->route('investments.history')->with('error', 'An error occurred during the unstaking.');
                 }
             } else {
-                return redirect()->route('user.history')->with('error', 'Invalid or inactive investment.');
+                return redirect()->route('investments.history')->with('error', 'Invalid or inactive investment.');
             }
         }
 
