@@ -27,6 +27,11 @@
                         <span class="nav-text">Investment</span>
                     </a>
                 </li>
+                <li><a href="{{route('investments.history')}}" class="ai-icon" aria-expanded="false">
+                        <i class="flaticon-381-network"></i>
+                        <span class="nav-text">Investment Plan</span>
+                    </a>
+                </li>
                 <li><a href="{{route('deposit')}}" class="ai-icon" aria-expanded="false">
                         <i class="flaticon-381-layer-1"></i>
                         <span class="nav-text">Deposit Trans</span>

@@ -41,7 +41,7 @@
     <link rel="/shortcut icon" type="image/x-icon" href="/homepage/img/OWB-LOGO-CC.png'">
     <link href="/vendor/owl-carousel/owl.carousel.css" rel="stylesheet">
     <link href="/vendor/bootstrap-select/dist/css/bootstrap-select.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 
 
     <!-- Style Css -->
@@ -885,7 +885,7 @@
             }, 1000);
         });
     </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+
     <div class="gtranslate_wrapper"></div>
     <script>
         window.gtranslateSettings = {
@@ -897,6 +897,10 @@
         }
     </script>
     <script src="https://cdn.gtranslate.net/widgets/latest/dropdown.js" defer></script>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Include Flasher JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
 
 </body>

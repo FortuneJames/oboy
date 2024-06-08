@@ -64,6 +64,9 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/dashboard/withdrawal-history', [UserController::class, 'withdrawalhistory'])->name('withdrawal');
 
+    Route::get('//dashboard/history', [UserController::class, 'history'])->name('investments.history');
+    Route::post('//dashboard/unstake/{historyId}', [UserController::class, 'unstake'])->name('investments.unstake');
+
 
 
     // admin

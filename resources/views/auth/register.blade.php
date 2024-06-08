@@ -15,7 +15,8 @@
 
 
     <!-- SEO Meta Tags -->
-    <meta name="keywords" content="Interactive Achivers, Funds Platform, Artificial Intelligence, Fund AllocationMine-Tech-Lab Staking Platform">
+    <meta name="keywords"
+        content="Interactive Achivers, Funds Platform, Artificial Intelligence, Fund AllocationMine-Tech-Lab Staking Platform">
     <meta name="robots" content="index, follow">
     <meta name="revisit-after" content="7 days">
 
@@ -32,6 +33,8 @@
     <link href="vendor/bootstrap-select/dist/css/bootstrap-select.min.css" rel="stylesheet">
     <link class="main-css" href="css/style.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/css/intlTelInput.css">
+    <link rel="stylesheet" href="path/to/intl-tel-input/build/css/intlTelInput.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/css/select2.min.css" rel="stylesheet">
 
 
 </head>
@@ -67,17 +70,21 @@
                                                 name="email" :value="old('email')" required autocomplete="username">
                                         </div>
                                         <x-input-error :messages="$errors->get('email')" class="mt-2" />
+
                                         <div class="form-group">
-                                            <label class="form-label">Phone Number</label>
-                                            <input class="form-control"  placeholder="+1 345 545 4643" type="tel"
-                                                name="number" :value="old('email')" required autocomplete="username">
+                                            <label class="form-label">Phone Number</label><br>
+                                            <input class="form-control" placeholder="+1 345 545 4643" type="tel"
+                                                id="phone" name="number" :value="old('email')" required
+                                                autocomplete="username">
                                         </div>
                                         <x-input-error :messages="$errors->get('number')" class="mt-2" />
+
                                         <div class="form-group">
                                             <label class="form-label">Country</label>
                                             <input class="form-control" placeholder="Uk" type="country" name="country"
                                                 :value="old('country')" required autocomplete="username">
                                         </div>
+
                                         <x-input-error :messages="$errors->get('country')" class="mt-2" />
 
                                         <label class="form-label">Password</label>
@@ -123,6 +130,46 @@
     <!--**********************************
   Scripts
  ***********************************-->
+
+
+
+
+
+
+
+
+    <script>
+        const input = document.querySelector("#phone");
+        const iti = window.intlTelInput(input, {
+            initialCountry: "auto",
+            geoIpLookup: function(callback) {
+                fetch('https://ipinfo.io?token=<your_token>')
+                    .then(response => response.json())
+                    .then(data => callback(data.country))
+                    .catch(() => callback('US'));
+            },
+            utilsScript: "path/to/intl-tel-input/build/js/utils.js" // This is a large file so include it last
+        });
+
+        // Example of getting the selected country data
+        const countryData = iti.getSelectedCountryData();
+        console.log(countryData.iso2); // 'us'
+        console.log(countryData.dialCode); // '1'
+
+        // Example of getting the full international number
+        input.addEventListener('blur', function() {
+            if (input.value.trim()) {
+                if (iti.isValidNumber()) {
+                    const number = iti.getNumber();
+                    console.log(number); // e.g. +12133734253
+                } else {
+                    console.error('Invalid phone number.');
+                }
+            }
+        });
+    </script>
+
+
     <!-- Required vendors -->
     <script src="vendor/global/global.min.js"></script>
     <script src="vendor/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
@@ -144,10 +191,13 @@
     <script>
         var phoneInput = document.querySelector("#phone");
         intlTelInput(phoneInput, {
-          utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/js/utils.js"
+            utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/js/utils.js"
         });
-      </script>
-
+    </script>
+    <script src="path/to/intl-tel-input/build/js/intlTelInput.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <!-- Include Select2 JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/js/select2.min.js"></script>
 
 
 

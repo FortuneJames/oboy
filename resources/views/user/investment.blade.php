@@ -30,7 +30,9 @@
                                         <h4>Maximum Amount</h4>
                                         <span class="price">${{ $investment->max }}</span><br>
                                         <h4>Duration</h4>
-                                        <span class="price">{{ $investment->duration }}</span>
+                                        <span class="price">${{ $investment->max }}</span><br>
+                                        <h4>Percentage</h4>
+                                        <span class="price">{{ $investment-> Percentage }}</span>
                                         <form action="{{ route('investments.invest', $investment->id) }}"
                                             method="post">
                                             @csrf

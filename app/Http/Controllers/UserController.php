@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
 use App\Models\Deposit;
+use App\Models\History;
 use App\Models\Investment;
 use App\Models\Payment;
 use Illuminate\Http\Request;
@@ -151,33 +152,104 @@ class UserController extends Controller
     {
         $user = Auth::user();
 
-        // Check if the user is logged in and has the role of 'user'
         if ($user && $user->role === 'user') {
-            // Check if the user's balance is sufficient for the investment
             if ($user->balance >= $investment->min) {
                 try {
-                    // Start a database transaction
                     DB::beginTransaction();
 
-                    // Deduct the minimum of the investment amount from the user's balance
-                    $user->balance -= min($user->balance, $investment->min);
+                    // Deduct the investment amount from the user's balance
+                    $investmentAmount = min($user->balance, $investment->min);
+                    $user->balance -= $investmentAmount;
                     $user->save();
 
-                    // Perform additional logic for tracking the investment, updating the database, etc.
+                    // Calculate the return amount
+                    $returnAmount = $investmentAmount * (1 + $investment->percentage / 100);
 
-                    // Commit the transaction if everything is successful
+                    // Create an investment history record
+                    DB::table('investment_histories')->insert([
+                        'user_id' => $user->id,
+                        'investment_id' => $investment->id,
+                        'amount' => $investmentAmount,
+                        'return_amount' => $returnAmount,
+                        'invested_at' => now(),
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]);
+
                     DB::commit();
 
                     return redirect()->back()->with('success', 'Investment successful.');
                 } catch (\Exception $e) {
-                    // Rollback the transaction if an exception occurs
                     DB::rollBack();
 
-                    // Log the exception or handle it appropriately
                     return redirect()->back()->with('error', 'An error occurred during the investment.');
                 }
             } else {
                 return redirect()->back()->with('error', 'Insufficient balance for investment.');
+            }
+        }
+
+        return redirect()->back()->with('error', 'Unauthorized action.');
+    }
+
+
+
+
+
+    public function history()
+{
+    $user = Auth::user();
+
+    if ($user && $user->role === 'user') {
+        // Fetch user's investment histories and related investment details
+        $histories = $user->histories()
+            ->with('investment') // Assuming 'investment' is the relationship name in your History model
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('user.history', compact('histories'));
+    }
+
+    return redirect()->back()->with('error', 'Unauthorized action.');
+}
+
+
+
+    public function unstake($historyId)
+    {
+        $user = Auth::user();
+
+        if ($user && $user->role === 'user') {
+            // Find the specific investment history entry for the user
+            $investmentHistory =Historyy::where('id', $historyId)
+                ->where('user_id', $user->id)
+                ->where('status', 'active')
+                ->first();
+
+            if ($investmentHistory) {
+                try {
+                    DB::beginTransaction();
+
+                    // Update the investment history status to 'unstaked'
+                    $investmentHistory->update([
+                        'status' => 'unstaked',
+                        'unstaked_at' => now(),
+                    ]);
+
+                    // Refund the invested amount back to the user's balance
+                    $user->balance += $investmentHistory->amount;
+                    $user->save();
+
+                    DB::commit();
+
+                    return redirect()->route('user.history')->with('success', 'Investment unstaked successfully.');
+                } catch (\Exception $e) {
+                    DB::rollBack();
+
+                    return redirect()->route('users.history')->with('error', 'An error occurred during the unstaking.');
+                }
+            } else {
+                return redirect()->route('user.history')->with('error', 'Invalid or inactive investment.');
             }
         }
 

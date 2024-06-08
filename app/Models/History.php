@@ -5,22 +5,21 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Investment extends Model
+class History extends Model
 {
     use HasFactory;
-
+    protected $table = 'investment_history';
+    
     protected $guarded = [];
-
 
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    public function histories()
+    // Define the relationship to the Investment model
+    public function investment()
     {
-        return $this->hasMany(History::class);
+        return $this->belongsTo(Investment::class);
     }
-
-
 }

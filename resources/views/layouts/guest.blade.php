@@ -69,6 +69,7 @@
                     src="/homepage/https://c.statcounter.com/11921154/0/6c07f98b/0/" alt="web analytics" /></a></div>
     </noscript>
     <!-- End of StatCounter Code -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 
 </head>
 
@@ -189,6 +190,10 @@
     <script src="/homepage/assets44/js/particles.min.js"></script>
     <!-- scripts js -->
     <script src="/homepage/assets44/js/scripts.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Include Flasher JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
 
 

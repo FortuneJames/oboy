@@ -41,6 +41,8 @@
 
     <link href="/vendor/bootstrap-select/dist/css/bootstrap-select.min.css" rel="stylesheet">
     <link class="main-css" href="/css/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="path/to/intl-tel-input/build/css/intlTelInput.css">
+
 
 </head>
 
@@ -116,6 +118,7 @@
         </div>
     </div>
 
+
     <!--**********************************
         Scripts
     ***********************************-->
@@ -137,7 +140,7 @@
         }
     </script>
     <script src="https://cdn.gtranslate.net/widgets/latest/dropdown.js" defer></script>
-    <script src="//code.tidio.co/ptzevyuu90mvxgiydeh6zh3gwbsuhv7j.js" async></script>
+
 
 
 </body>
