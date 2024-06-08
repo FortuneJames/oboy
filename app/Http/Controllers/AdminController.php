@@ -164,6 +164,7 @@ class AdminController extends Controller
             'plan' => $request->input('plan'),
             'min' => $request->input('min'),
             'max' => $request->input('max'),
+            'percentage' => $request->input('percentage'),
             'duration' => $request->input('duration'),
         ]);
 

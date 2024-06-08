@@ -34,6 +34,8 @@
                                         <span class="price">${{$investment->max}}</span><br>
                                         <h4>Duration</h4>
                                         <span class="price">{{$investment->duration}}</span>
+                                        <h4>Percentage</h4>
+                                        <span class="price">{{$investment->percentage}}</span>
                                     </div>
                                 </div>
                             </div>
@@ -70,7 +72,7 @@
                                 <div class="form-group">
                                     <label class="col-form-label">Minimum:</label>
                                     <input type="text" class="form-control" name="min" id="name2"
-                                        placeholder="Last Name" />
+                                        placeholder="min" />
                                 </div>
                             </div>
 
@@ -78,7 +80,7 @@
                                 <div class="form-group">
                                     <label class="col-form-label">Maximum:</label>
                                     <input type="text" class="form-control" name="max" id="name2"
-                                        placeholder="Last Name" />
+                                        placeholder="max" />
                                 </div>
                             </div>
 
@@ -86,7 +88,14 @@
                                 <div class="form-group">
                                     <label class="col-form-label">Duration:</label>
                                     <input type="text" class="form-control" name="duration" id="name2"
-                                        placeholder="Last Name" />
+                                        placeholder="duration" />
+                                </div>
+                            </div>
+                            <div class="col-xl-6">
+                                <div class="form-group">
+                                    <label class="col-form-label">Percentage:</label>
+                                    <input type="text" class="form-control" name="percentage" id="name2"
+                                        placeholder="percentage" />
                                 </div>
                             </div>
 
