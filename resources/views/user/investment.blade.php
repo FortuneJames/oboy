@@ -30,7 +30,7 @@
                                         <h4>Maximum Amount</h4>
                                         <span class="price">${{ $investment->max }}</span><br><br>
                                         <h4>Duration</h4>
-                                        <span class="price">${{ $investment->max }}</span><br><br>
+                                        <span class="price">${{ $investment->duration }}</span><br><br>
                                         <h4>Percentage</h4>
                                         <span class="price">{{ $investment->percentage }}</span><br><br>
                                         <form action="{{ route('investments.invest', $investment->id) }}"
