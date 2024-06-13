@@ -597,7 +597,7 @@
                                 <i class="fa fa-phone" style="font-size:14px"></i>
                                 <div class="contact_detail">
                                     <span>Phone</span>
-                                    <p>+92 355 678 7475</p>
+                                    <p>+44 7553 182072</p>
                                 </div>
                             </li>
                             <li class="input-group-prepend align-items-center animation" data-animation="fadeInUp"
