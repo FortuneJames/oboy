@@ -901,6 +901,26 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- Include Flasher JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script>
+        // Disable right-click
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+
+        // Disable F12 key and Ctrl+Shift+I/J/U
+        document.onkeydown = function(e) {
+            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && ['I', 'J', 'U'].includes(e.key.toUpperCase()))) {
+                return false;
+            }
+        };
+
+        // Disable Ctrl+U (View Source)
+        document.onkeydown = function(e) {
+            if (e.ctrlKey && e.key === 'u') {
+                return false;
+            }
+        };
+    </script>
 
 
 </body>

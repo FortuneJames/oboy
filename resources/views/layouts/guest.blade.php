@@ -10,7 +10,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Mine-Tech-Lab Is A Professional Creative Staking Platform" />
 
-    <link rel="stylesheet" href="/homepage/../cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet"
+        href="/homepage/../cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        /* WhatsApp Button Styling */
+        .whatsapp-button {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            width: 60px;
+            height: 60px;
+            background-color: #25D366;
+            border-radius: 50%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+        }
+
+        .whatsapp-button img {
+            width: 35px;
+            height: 35px;
+        }
+
+        .whatsapp-button:hover {
+            background-color: #20c857;
+        }
+    </style>
 
 
 
@@ -24,7 +51,8 @@
     <!-- Latest Bootstrap min CSS -->
     <link rel="stylesheet" href="/homepage/assets44/bootstrap/css/bootstrap.min.css">
     <!-- Google Font -->
-    <link href="/homepage/https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900" rel="stylesheet">
+    <link href="/homepage/https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900"
+        rel="stylesheet">
     <!-- Font Awesome CSS -->
     <link rel="stylesheet" href="/homepage/assets44/css/ionicons.min.css">
     <!--- owl carousel CSS-->
@@ -65,8 +93,9 @@
         </"+"script>");
     </script>
     <noscript>
-        <div class="statcounter"><a title="web analytics" href="/homepage/https://statcounter.com/"><img class="statcounter"
-                    src="/homepage/https://c.statcounter.com/11921154/0/6c07f98b/0/" alt="web analytics" /></a></div>
+        <div class="statcounter"><a title="web analytics" href="/homepage/https://statcounter.com/"><img
+                    class="statcounter" src="/homepage/https://c.statcounter.com/11921154/0/6c07f98b/0/"
+                    alt="web analytics" /></a></div>
     </noscript>
     <!-- End of StatCounter Code -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
@@ -92,7 +121,8 @@
                 <a class="navbar-brand page-scroll animation" href="/homepage/#home" data-animation="fadeInLeft"
                     data-animation-delay="0.8s">
                     <img class="logo_light" width="170px" src="/homepage/assets44/images/logo.png" alt="logo" />
-                    <img class="logo_dark" width="170px" src="/homepage/assets44/images/logo_dark.png" alt="logo" />
+                    <img class="logo_dark" width="170px" src="/homepage/assets44/images/logo_dark.png"
+                        alt="logo" />
                 </a>
                 <button class="navbar-toggler animation" data-animation="fadeInRight" data-animation-delay="1.2s"
                     type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -110,7 +140,8 @@
                     </ul>
                     <ul class="navbar-nav nav_btn animation" data-animation="fadeInRight" data-animation-delay="1.6s">
                         <li><a class="btn btn-default" href="{{ route('login') }}">Login</a></li>
-                        <li><a class="nav-link page-scroll btn btn-default" href="{{ route('register') }}">Register</a></li>
+                        <li><a class="nav-link page-scroll btn btn-default"
+                                href="{{ route('register') }}">Register</a></li>
                     </ul>
                 </div>
             </nav>
@@ -203,6 +234,31 @@
             window.location.href = "https://minetechlab.com/change-lang/" + code;
         });
     </script>
+    <a href="https://wa.me/+447553182072" class="whatsapp-button" target="_blank">
+        <img src="https://www.flaticon.com/free-icons/whatsapp" alt="WhatsApp">
+
+    </a>
+    <script>
+        // Disable right-click
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+
+        // Disable F12 key and Ctrl+Shift+I/J/U
+        document.onkeydown = function(e) {
+            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && ['I', 'J', 'U'].includes(e.key.toUpperCase()))) {
+                return false;
+            }
+        };
+
+        // Disable Ctrl+U (View Source)
+        document.onkeydown = function(e) {
+            if (e.ctrlKey && e.key === 'u') {
+                return false;
+            }
+        };
+    </script>
+
 
 
 
